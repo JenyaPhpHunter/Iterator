@@ -20,7 +20,7 @@ class Myiterator implements \Iterator, \ArrayAccess
             $fp = fopen($paths, "r");
             if ($fp) {
                 while (($buffer = fgets($fp, 4096)) !== false) {
-                        $this->data[] =  str_getcsv(trim($buffer,"\n"));
+                    $this->data[] = str_getcsv(trim($buffer, "\n"));
                     $row++;
                 }
                 if (!feof($fp)) {
@@ -31,7 +31,7 @@ class Myiterator implements \Iterator, \ArrayAccess
         }
     }
 
-    public function fromCsv($paths,$desired_row)
+    public function fromCsv($paths, $desired_row)
     {
         if ($paths) {
             $rows = -1;
@@ -45,12 +45,12 @@ class Myiterator implements \Iterator, \ArrayAccess
 
                 }
             }
-            if($rows<$desired_row || $desired_row == 0){
-                echo "Указанное количество строк " . $desired_row . " больше количества строк " . $rows .  " или равно 0 в файле" . PHP_EOL;
+            if ($rows < $desired_row || $desired_row == 0) {
+                echo "Указанное количество строк " . $desired_row . " больше количества строк " . $rows . " или равно 0 в файле" . PHP_EOL;
                 exit();
             }
-            echo "Данные строки №" . $desired_row . ":". PHP_EOL;
-            for($i=0;$i<count($data[0]);$i++){
+            echo "Данные строки №" . $desired_row . ":" . PHP_EOL;
+            for ($i = 0; $i < count($data[0]); $i++) {
                 echo $data[0][$i] . " = " . $data[1][$i] . PHP_EOL;
             }
         }
@@ -90,7 +90,7 @@ class Myiterator implements \Iterator, \ArrayAccess
 
     public function offsetGet($offset)
     {
-        if($offset < count($this->data) && $offset>0){
+        if ($offset < count($this->data) && $offset > 0) {
             return $this->data[$offset];
         } else {
             echo "такой строки нет в файле" . PHP_EOL;
@@ -108,9 +108,8 @@ class Myiterator implements \Iterator, \ArrayAccess
                 fputcsv($fp, $rows);
             }
             fclose($fp);
-        }
-        elseif ($offset < count($this->data) && $offset > 0){
-            for($i=0;$i<count($this->data);$i++) {
+        } elseif ($offset < count($this->data) && $offset > 0) {
+            for ($i = 0; $i < count($this->data); $i++) {
                 if ($i == $offset) {
                     $this->data[$offset] = $value;
                 }
@@ -127,7 +126,7 @@ class Myiterator implements \Iterator, \ArrayAccess
 
     public function offsetUnset($offset)
     {
-        if($offset < 1){
+        if ($offset < 1) {
             echo "Вы ввели неправильный индекс" . PHP_EOL;
         } else {
             for ($i = 0; $i < count($this->data); $i++) {
