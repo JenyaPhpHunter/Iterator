@@ -4,9 +4,9 @@ namespace Iterator;
 
 class Myiterator implements \Iterator, \ArrayAccess
 {
-    protected $pointer;
+    protected int $pointer;
 
-    protected $paths;
+    protected string $paths;
 
     protected array $data = [];
 
@@ -46,7 +46,8 @@ class Myiterator implements \Iterator, \ArrayAccess
                 }
             }
             if ($rows < $desired_row || $desired_row == 0) {
-                echo "Указанное количество строк " . $desired_row . " больше количества строк " . $rows . " или равно 0 в файле" . PHP_EOL;
+                echo "Указанное количество строк " . $desired_row .
+                    " больше количества строк " . $rows . " или равно 0 в файле" . PHP_EOL;
                 exit();
             }
             echo "Данные строки №" . $desired_row . ":" . PHP_EOL;
@@ -83,7 +84,7 @@ class Myiterator implements \Iterator, \ArrayAccess
         $this->pointer = 1;
     }
 
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->data[$offset]);
     }
@@ -95,7 +96,6 @@ class Myiterator implements \Iterator, \ArrayAccess
         } else {
             echo "такой строки нет в файле" . PHP_EOL;
         }
-
     }
 
     public function offsetSet($offset, $value)

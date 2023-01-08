@@ -17,5 +17,3 @@ if (!isset($myiterator[5])) {
     $myiterator[4] = ["4", "moto", "1"];  // добавляет строку в конец файла
 }
 unset($myiterator[4]);  // удаляет строку из файла
-
-
