@@ -1,0 +1,19 @@
+{
+    "name": "jenya/iterator",
+    "description": "iterator",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Iterator\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Jenya",
+            "email": "jenyaphphunter@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
