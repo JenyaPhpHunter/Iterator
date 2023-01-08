@@ -6,12 +6,11 @@ $paths = '/var/www/iterator/files_csv/cars.csv';
 //$paths = '/var/www/iterator/files_csv/store.csv';
 $desired_row = 1;
 
-$storage = new \Iterator\Storage($paths);
-$data = $storage->fromCsv($paths, $desired_row);
+$myiterator = new \Iterator\Myiterator($paths);
+$data = $myiterator->fromCsv($paths, $desired_row);
 //$storage[1];
-foreach ($data as $value){
-    for($i=0;$i<$value[2];$i++){
-        echo $value[0][$i] . " = " . $value[1][$i] . PHP_EOL;
-    }
+foreach ($myiterator as $value){
+    echo "порядковый номер " . $value[0] . ", тип транспорта " . $value[1] . " и грузоподьемность " . $value[2] .PHP_EOL;
 }
+
 
