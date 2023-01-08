@@ -2,14 +2,17 @@
 
 namespace Iterator;
 
-class Myiterator implements \Iterator
+class Myiterator implements \Iterator, \ArrayAccess
 {
     protected $pointer;
 
     protected $paths;
 
+    protected array $data = [];
+
     public function __construct($paths)
     {
+        $this->paths = $paths;
         if (!file_exists($paths)) {
             echo "Такого файла не существует";
         } else {
@@ -17,7 +20,7 @@ class Myiterator implements \Iterator
             $fp = fopen($paths, "r");
             if ($fp) {
                 while (($buffer = fgets($fp, 4096)) !== false) {
-                        $this->paths[] =  str_getcsv(trim($buffer,"\n"));
+                        $this->data[] =  str_getcsv(trim($buffer,"\n"));
                     $row++;
                 }
                 if (!feof($fp)) {
@@ -56,7 +59,7 @@ class Myiterator implements \Iterator
 
     public function current()
     {
-        return $this->paths[$this->pointer];
+        return $this->data[$this->pointer];
     }
 
     public function next()
@@ -71,7 +74,7 @@ class Myiterator implements \Iterator
 
     public function valid()
     {
-        return isset($this->paths[$this->pointer]);
+        return isset($this->data[$this->pointer]);
     }
 
     public function rewind()
@@ -80,4 +83,63 @@ class Myiterator implements \Iterator
         $this->pointer = 1;
     }
 
+    public function offsetExists($offset)
+    {
+        return isset($this->data[$offset]);
+    }
+
+    public function offsetGet($offset)
+    {
+        if($offset < count($this->data) && $offset>0){
+            return $this->data[$offset];
+        } else {
+            echo "такой строки нет в файле" . PHP_EOL;
+        }
+
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        if ($offset === null || $offset >= count($this->data)) {
+            $offset = count($this->data);
+            $this->data[$offset] = $value;
+            $fp = fopen($this->paths, 'w');
+            foreach ($this->data as $rows) {
+                fputcsv($fp, $rows);
+            }
+            fclose($fp);
+        }
+        elseif ($offset < count($this->data) && $offset > 0){
+            for($i=0;$i<count($this->data);$i++) {
+                if ($i == $offset) {
+                    $this->data[$offset] = $value;
+                }
+            }
+            $fp = fopen($this->paths, 'w');
+            foreach ($this->data as $rows) {
+                fputcsv($fp, $rows);
+            }
+            fclose($fp);
+        } else {
+            echo "Ваш индекс меньше нуля" . PHP_EOL;
+        }
+    }
+
+    public function offsetUnset($offset)
+    {
+        if($offset < 1){
+            echo "Вы ввели неправильный индекс" . PHP_EOL;
+        } else {
+            for ($i = 0; $i < count($this->data); $i++) {
+                if ($i == $offset) {
+                    unset($this->data[$offset]);
+                }
+            }
+            $fp = fopen($this->paths, 'w');
+            foreach ($this->data as $rows) {
+                fputcsv($fp, $rows);
+            }
+            fclose($fp);
+        }
+    }
 }
